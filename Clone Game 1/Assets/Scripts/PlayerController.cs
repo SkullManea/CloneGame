@@ -22,10 +22,11 @@ public class PlayerController : MonoBehaviour
     public float jumpCost;
     public float chargeRate;
     private Coroutine recharge;
-    private bool hasJumped = false;
     public UnityEngine.UI.Image staminaBar;
 
-
+    [Header ("Attacking")]
+    public GameObject hand;
+    public float attackCost;
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -56,7 +57,6 @@ public class PlayerController : MonoBehaviour
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
         HandleBetterFall();
-        StaminaHandle();
     }
 
     private void FixedUpdate()
@@ -82,7 +82,7 @@ public class PlayerController : MonoBehaviour
         {
         rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
 
-        currentStamina -= jumpCost;//*Time.deltaTime;
+        currentStamina -= jumpCost;
         Staminacharge();
        
         } 
@@ -96,14 +96,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void StaminaHandle()
+    private void OnAttack(InputAction.CallbackContext context)
     {
-        if (hasJumped)
+        if (context.performed)
         {
-            // currentStamina -= jumpCost;//*Time.deltaTime;
-            // Staminacharge();
+        
+        currentStamina -= attackCost;
+        Staminacharge();  
         }
-       
+        
     }
 
     void Staminacharge()
