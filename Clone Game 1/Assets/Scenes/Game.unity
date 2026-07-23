@@ -686,8 +686,8 @@ MonoBehaviour:
   fallMultiplier: 2
   currentStamina: 100
   maxStamina: 100
-  jumpCost: 10
-  chargeRate: 2
+  jumpCost: 20
+  chargeRate: 20
   staminaBar: {fileID: 12374541}
 --- !u!1 &1469553710
 GameObject:

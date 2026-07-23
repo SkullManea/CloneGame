@@ -80,11 +80,12 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounded) 
         {
-            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
-            hasJumped = true;
-            
-        }
+        rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
+
+        currentStamina -= jumpCost;//*Time.deltaTime;
+        Staminacharge();
        
+        } 
     }
 
     private void HandleBetterFall()
@@ -97,10 +98,10 @@ public class PlayerController : MonoBehaviour
 
     private void StaminaHandle()
     {
-        if (!isGrounded && hasJumped)
+        if (hasJumped)
         {
-            currentStamina -= jumpCost * Time.deltaTime;
-            Staminacharge();
+            // currentStamina -= jumpCost;//*Time.deltaTime;
+            // Staminacharge();
         }
        
     }
@@ -115,15 +116,17 @@ public class PlayerController : MonoBehaviour
         staminaBar.fillAmount = currentStamina / maxStamina;
         if (recharge != null) StopCoroutine(recharge);
         recharge = StartCoroutine(RechargeStamina());
+       
     }
 
     private IEnumerator RechargeStamina()
     {
         yield return new WaitForSeconds(1f);
+
         while (currentStamina < maxStamina)
         {
            currentStamina += chargeRate /10f;
-           if (currentStamina < maxStamina) currentStamina = maxStamina;
+           if (currentStamina > maxStamina) currentStamina = maxStamina;
            staminaBar.fillAmount = currentStamina / maxStamina;
            yield return new WaitForSeconds(.1f);
         }
