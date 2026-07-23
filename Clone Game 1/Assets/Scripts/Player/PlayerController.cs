@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float fallMultiplier = 2f;
 
-    [Header ("Stamina")]
+    [Header("Stamina")]
     public float currentStamina;
     public float maxStamina;
     public float jumpCost;
@@ -25,7 +25,12 @@ public class PlayerController : MonoBehaviour
     private bool hasJumped = false;
     public UnityEngine.UI.Image staminaBar;
 
+    [Header("Knock Back")]
+    public float KBForce;
+    public float KBCounter;
+    public float KBTotalTime;
 
+    public bool KnockFromRight;
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -61,7 +66,23 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Move();
+        if (KBCounter <= 0)
+        {
+            Move();
+        }
+        else
+        {
+            if (KnockFromRight == true)
+            {
+                rigidBody.linearVelocity = new Vector2(-KBForce, KBForce);
+            }
+            if (KnockFromRight == false)
+            {
+                rigidBody.linearVelocity = new Vector2(KBForce, KBForce);
+            }
+
+            KBCounter -= Time.deltaTime;
+        }
         Debug.Log(currentStamina);
     }
 
@@ -78,14 +99,14 @@ public class PlayerController : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext contex)
     {
-        if (isGrounded) 
+        if (isGrounded)
         {
-        rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
+            rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
 
-        currentStamina -= jumpCost;//*Time.deltaTime;
-        Staminacharge();
-       
-        } 
+            currentStamina -= jumpCost;//*Time.deltaTime;
+            Staminacharge();
+
+        }
     }
 
     private void HandleBetterFall()
@@ -103,12 +124,12 @@ public class PlayerController : MonoBehaviour
             // currentStamina -= jumpCost;//*Time.deltaTime;
             // Staminacharge();
         }
-       
+
     }
 
     void Staminacharge()
     {
-         if (currentStamina < 0)
+        if (currentStamina < 0)
         {
             currentStamina = 0;
             //insert burnout
@@ -116,7 +137,7 @@ public class PlayerController : MonoBehaviour
         staminaBar.fillAmount = currentStamina / maxStamina;
         if (recharge != null) StopCoroutine(recharge);
         recharge = StartCoroutine(RechargeStamina());
-       
+
     }
 
     private IEnumerator RechargeStamina()
@@ -125,10 +146,10 @@ public class PlayerController : MonoBehaviour
 
         while (currentStamina < maxStamina)
         {
-           currentStamina += chargeRate /10f;
-           if (currentStamina > maxStamina) currentStamina = maxStamina;
-           staminaBar.fillAmount = currentStamina / maxStamina;
-           yield return new WaitForSeconds(.1f);
+            currentStamina += chargeRate / 10f;
+            if (currentStamina > maxStamina) currentStamina = maxStamina;
+            staminaBar.fillAmount = currentStamina / maxStamina;
+            yield return new WaitForSeconds(.1f);
         }
     }
 
