@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
 
     [SerializeField] private float fallMultiplier = 2f;
+
+    [Header ("Stamina")]
+    public float currentStamina;
+    public float maxStamina;
+    public float jumpCost;
+    public float chargeRate;
+    private Coroutine recharge;
+    private bool hasJumped = false;
+    public UnityEngine.UI.Image staminaBar;
+
+
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -44,11 +56,13 @@ public class PlayerController : MonoBehaviour
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
         HandleBetterFall();
+        StaminaHandle();
     }
 
     private void FixedUpdate()
     {
         Move();
+        Debug.Log(currentStamina);
     }
 
     private void CheckIsGrounded()
@@ -67,7 +81,10 @@ public class PlayerController : MonoBehaviour
         if (isGrounded) 
         {
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
+            hasJumped = true;
+            
         }
+       
     }
 
     private void HandleBetterFall()
@@ -75,6 +92,40 @@ public class PlayerController : MonoBehaviour
         if (rigidBody.linearVelocity.y < 0)
         {
             rigidBody.linearVelocity += Vector2.up * Physics2D.gravity.y * fallMultiplier * Time.fixedDeltaTime;
+        }
+    }
+
+    private void StaminaHandle()
+    {
+        if (!isGrounded && hasJumped)
+        {
+            currentStamina -= jumpCost * Time.deltaTime;
+            Staminacharge();
+        }
+       
+    }
+
+    void Staminacharge()
+    {
+         if (currentStamina < 0)
+        {
+            currentStamina = 0;
+            //insert burnout
+        }
+        staminaBar.fillAmount = currentStamina / maxStamina;
+        if (recharge != null) StopCoroutine(recharge);
+        recharge = StartCoroutine(RechargeStamina());
+    }
+
+    private IEnumerator RechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+        while (currentStamina < maxStamina)
+        {
+           currentStamina += chargeRate /10f;
+           if (currentStamina < maxStamina) currentStamina = maxStamina;
+           staminaBar.fillAmount = currentStamina / maxStamina;
+           yield return new WaitForSeconds(.1f);
         }
     }
 
