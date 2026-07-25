@@ -551,8 +551,8 @@ MonoBehaviour:
   moveSpeed: 2
   patrolDestination: 0
   playerTransform: {fileID: 994283773}
-  isChasing: 0
   chaseDistance: 2
+  safeDistance: 7
 --- !u!1 &786767856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1127,9 +1127,7 @@ MonoBehaviour:
   jumpCost: 20
   chargeRate: 20
   staminaBar: {fileID: 12374541}
-  KBForce: 7
-  KBCounter: 0
-  KBTotalTime: 0.2
+  KBForce: 5
   KnockFromRight: 0
 --- !u!114 &994283775
 MonoBehaviour:
@@ -1143,9 +1141,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd09790f2bce6049aa1c9047afb7647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 10
-  health: 0
-  healthText: {fileID: 0}
+  maxHealth: 1000
+  health: 12
+  healthText: {fileID: 800372071}
 --- !u!1 &1427647347
 GameObject:
   m_ObjectHideFlags: 0
