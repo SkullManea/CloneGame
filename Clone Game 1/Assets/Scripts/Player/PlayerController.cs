@@ -1,10 +1,12 @@
 using System.Collections;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     [SerializeField] private float moveSpeed = 7f;
+    private bool canMove = true;
 
     [Header("Jump")]
     [SerializeField] private float jumpForce = 5f;
@@ -27,8 +29,6 @@ public class PlayerController : MonoBehaviour
 
     [Header("Knock Back")]
     public float KBForce;
-    public float KBCounter;
-    public float KBTotalTime;
 
     public bool KnockFromRight;
 
@@ -55,46 +55,45 @@ public class PlayerController : MonoBehaviour
         playerControls.Disable();
     }
 
-    // Update is called once per frame
     private void Update()
     {
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
-        HandleBetterFall();
         StaminaHandle();
     }
 
     private void FixedUpdate()
     {
-        if (KBCounter <= 0)
-        {
-            Move();
-        }
-        else
-        {
-            if (KnockFromRight == true)
-            {
-                rigidBody.linearVelocity = new Vector2(-KBForce, KBForce);
-            }
-            if (KnockFromRight == false)
-            {
-                rigidBody.linearVelocity = new Vector2(KBForce, KBForce);
-            }
+        HandleBetterFall();
+        Move();
+    }
 
-            KBCounter -= Time.deltaTime;
-        }
-        Debug.Log(currentStamina);
+    public void KnockBack(bool fromRight)
+    {
+        canMove = false;
+
+        float direction = fromRight ? -1 : 1f;
+        rigidBody.linearVelocity = new Vector2(direction * KBForce, KBForce);
     }
 
     private void CheckIsGrounded()
     {
+        bool wasGrounded = isGrounded;
+
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        if (!wasGrounded && isGrounded)
+        {
+            canMove = true;
+        }
     }
 
     private void Move()
     {
-        rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
+        if (!canMove)
+            return;
 
+        rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
     }
 
     private void OnJump(InputAction.CallbackContext contex)
