@@ -22,15 +22,19 @@ public class PlayerController : MonoBehaviour
     public float jumpCost;
     public float chargeRate;
     private Coroutine recharge;
-    private bool hasJumped = false;
     public UnityEngine.UI.Image staminaBar;
 
+<<<<<<< HEAD:Clone Game 1/Assets/Scripts/Player/PlayerController.cs
     [Header("Knock Back")]
     public float KBForce;
     public float KBCounter;
     public float KBTotalTime;
 
     public bool KnockFromRight;
+=======
+    [Header ("Attacking")]
+    public float attackCost;
+>>>>>>> Attack:Clone Game 1/Assets/Scripts/PlayerController.cs
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -61,7 +65,6 @@ public class PlayerController : MonoBehaviour
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
         HandleBetterFall();
-        StaminaHandle();
     }
 
     private void FixedUpdate()
@@ -94,7 +97,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
-
+        //flip the character on the x-axis 1 to -1 when moving directions
     }
 
     private void OnJump(InputAction.CallbackContext contex)
@@ -103,10 +106,17 @@ public class PlayerController : MonoBehaviour
         {
             rigidBody.linearVelocity = new Vector2(rigidBody.linearVelocity.x, jumpForce);
 
+<<<<<<< HEAD:Clone Game 1/Assets/Scripts/Player/PlayerController.cs
             currentStamina -= jumpCost;//*Time.deltaTime;
             Staminacharge();
 
         }
+=======
+        currentStamina -= jumpCost;
+        Staminacharge();
+       
+        } 
+>>>>>>> Attack:Clone Game 1/Assets/Scripts/PlayerController.cs
     }
 
     private void HandleBetterFall()
@@ -117,6 +127,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+<<<<<<< HEAD:Clone Game 1/Assets/Scripts/Player/PlayerController.cs
     private void StaminaHandle()
     {
         if (hasJumped)
@@ -126,6 +137,18 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+=======
+    // private void OnAttack(InputAction.CallbackContext context)
+    // {
+    //     if (context.performed)
+    //     {
+        
+    //     currentStamina -= attackCost;
+    //     Staminacharge();  
+    //     }
+        
+    // }
+>>>>>>> Attack:Clone Game 1/Assets/Scripts/PlayerController.cs
 
     void Staminacharge()
     {
