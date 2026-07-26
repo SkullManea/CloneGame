@@ -25,7 +25,6 @@ public class PlayerController : MonoBehaviour
     public UnityEngine.UI.Image staminaBar;
 
     [Header ("Attacking")]
-    public GameObject hand;
     public float attackCost;
 
     private PlayerControls playerControls;
@@ -73,7 +72,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
-
+        //flip the character on the x-axis 1 to -1 when moving directions
     }
 
     private void OnJump(InputAction.CallbackContext contex)
@@ -96,16 +95,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnAttack(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
+    // private void OnAttack(InputAction.CallbackContext context)
+    // {
+    //     if (context.performed)
+    //     {
         
-        currentStamina -= attackCost;
-        Staminacharge();  
-        }
+    //     currentStamina -= attackCost;
+    //     Staminacharge();  
+    //     }
         
-    }
+    // }
 
     void Staminacharge()
     {

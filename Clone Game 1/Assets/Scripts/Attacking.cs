@@ -1,18 +1,46 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Attacking : MonoBehaviour
 {
-    [SerializeField] private int damage;
+    public Transform attackOrigin;
+    public float attackRadius = 1f;
+    public LayerMask enemyMask;
 
-    private void OnTriggerEnter(Collider other)
+    public int attackDamage;
+
+    public float cooldownTime = .5f;
+    public float cooldownTimer = 0f;
+
+    private void Update()
     {
-        if (other.CompareTag("Enemy"))
-        {
-            //enemyscript enemy = other.GetComponent<enemyscript>();
-            //enemy.TakeDamage(damage); Take Damage assigned in enemy script
+      
+    }
 
-            //TakeDamage(int damage) health -=damage
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackOrigin.position, attackRadius);       
+    }
+
+    private void OnAttack(InputAction.CallbackContext context)
+    {
+        Debug.Log("Attack");
+         if (cooldownTimer <= 0)
+        {
+            {
+                Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
+                foreach (var enemy in enemiesInRange)
+                {
+                    //enemy.GetComponent<HealthManager>().TakeDamage(attackDamage);
+                }
+
+                cooldownTimer = cooldownTime; //resets timer
+            }  
+        }
+        else
+        {
+            cooldownTimer -= Time.deltaTime;
         }
     }
 }
