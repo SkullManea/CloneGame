@@ -509,7 +509,6 @@ GameObject:
   - component: {fileID: 994283771}
   - component: {fileID: 994283770}
   - component: {fileID: 994283774}
-  - component: {fileID: 994283775}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -692,24 +691,12 @@ MonoBehaviour:
   chargeRate: 20
   staminaBar: {fileID: 12374541}
   attackCost: 20
---- !u!114 &994283775
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 994283768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44737d465d9792345a233780d7c5da2e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Attacking
   attackOrigin: {fileID: 1201522843}
-  attackRadius: 1
+  attackRadius: 0.8
   enemyMask:
     serializedVersion: 2
     m_Bits: 64
-  attackDamage: 2
+  attackDamage: 20
   cooldownTime: 0.5
   cooldownTimer: 0
 --- !u!1 &1201522842
