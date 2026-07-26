@@ -103,9 +103,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Attack(InputAction.CallbackContext context)
+    private void OnAttack(InputAction.CallbackContext contex)
     {
-        Debug.Log("Attack");
+        if (contex.performed)
+        {
+            Debug.Log("Attack");
          if (cooldownTimer <= 0)
         {
             {
@@ -122,6 +124,8 @@ public class PlayerController : MonoBehaviour
         {
             cooldownTimer -= Time.deltaTime;
         }
+        }
+        
         
     }
 
