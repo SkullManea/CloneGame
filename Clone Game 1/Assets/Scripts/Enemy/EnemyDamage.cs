@@ -11,7 +11,7 @@ public class EnemyDamage : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             bool fromRight = collision.transform.position.x <= transform.position.x;
-            // playerController.KnockBack(fromRight);
+            playerController.KnockBack(fromRight);
 
             playerHealth.TakeDamage(damage);
         }
