@@ -105,7 +105,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack(InputAction.CallbackContext contex)
     {
-        Debug.Log("Attack");
         if (cooldownTimer <= 0)
         {
             {
@@ -113,6 +112,8 @@ public class PlayerController : MonoBehaviour
                 foreach (var enemy in enemiesInRange)
                 {
                     //enemy.GetComponent<HealthManager>().TakeDamage(attackDamage);
+                    currentStamina -= attackCost;
+                    Staminacharge();
                 }
 
                 cooldownTimer = cooldownTime; //resets timer
