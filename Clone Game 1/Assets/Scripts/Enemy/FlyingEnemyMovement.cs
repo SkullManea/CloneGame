@@ -30,6 +30,8 @@ public class FlyingEnemyMovement : MonoBehaviour
     private Vector2 patrolTarget;
     private bool waiting;
 
+    [SerializeField] private SpriteRenderer sprite;
+
     void Start()
     {
         PickNewPatrolPoint();
@@ -119,9 +121,9 @@ public class FlyingEnemyMovement : MonoBehaviour
     private void FaceDirection(Vector2 target)
     {
         if (target.x < transform.position.x)
-            transform.localScale = new Vector3(1, 1, 1);
+            sprite.flipX = false;
         else
-            transform.localScale = new Vector3(-1, 1, 1);
+            sprite.flipX = true;
     }
 
     private void OnDrawGizmosSelected()

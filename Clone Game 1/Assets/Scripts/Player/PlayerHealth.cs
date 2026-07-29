@@ -7,7 +7,6 @@ public class PlayerHealth : MonoBehaviour
     public int health;
     public TextMeshProUGUI healthText;
 
-
     void Start()
     {
         health = maxHealth;
@@ -16,6 +15,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log(damage);
         health -= damage;
         healthText.text = "HP: " + health;
 

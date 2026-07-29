@@ -1,16 +1,30 @@
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Health")]
+    public int maxHealth = 10;
+    public int health;
+    public TextMeshProUGUI healthText;
+
+
     void Start()
     {
-        
+        health = maxHealth;
+        healthText.text = "HP: " + health;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    public void TakeDamage(int damage)
     {
-        
+        health -= damage;
+        healthText.text = "HP: " + health;
+
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
     }
 }
