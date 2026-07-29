@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         playerControls = new PlayerControls();
         rigidBody = GetComponent<Rigidbody2D>();
         playerControls.Movement.Jump.performed += OnJump;
-        
+        playerControls.Movement.Attack.performed += OnAttack;
     }
 
     private void OnEnable()
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Move();
-        Debug.Log(currentStamina);
+        //Debug.Log(currentStamina);
     }
 
     private void CheckIsGrounded()
@@ -105,10 +105,8 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack(InputAction.CallbackContext contex)
     {
-        if (contex.performed)
-        {
-            Debug.Log("Attack");
-         if (cooldownTimer <= 0)
+        Debug.Log("Attack");
+        if (cooldownTimer <= 0)
         {
             {
                 Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
@@ -124,9 +122,7 @@ public class PlayerController : MonoBehaviour
         {
             cooldownTimer -= Time.deltaTime;
         }
-        }
-        
-        
+         
     }
 
     void Staminacharge()
