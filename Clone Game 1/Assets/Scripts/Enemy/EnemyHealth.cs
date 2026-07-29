@@ -9,17 +9,18 @@ public class EnemyHealth : MonoBehaviour
     public int health;
     public TextMeshProUGUI healthText;
 
-
     void Start()
     {
         health = maxHealth;
         healthText.text = "HP: " + health;
     }
 
-
     public void TakeDamage(int damage)
     {
+        Debug.Log(health);
         health -= damage;
+
+        //if (healthText != null)
         healthText.text = "HP: " + health;
 
         if (health <= 0)

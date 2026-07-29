@@ -93,7 +93,13 @@ public class PlayerController : MonoBehaviour
             return;
 
         rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
+
         //flip the character on the x-axis 1 to -1 when moving directions
+        if (rigidBody.linearVelocityX < 0)
+            transform.localScale = new Vector3(-1, 1, 1);
+
+        if (rigidBody.linearVelocityX > 0)
+            transform.localScale = new Vector3(1, 1, 1);
     }
 
     public void KnockBack(bool fromRight)
