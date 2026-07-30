@@ -7,7 +7,13 @@ public class EnemyHealth : MonoBehaviour
     [Header("Health")]
     public int maxHealth = 10;
     public int health;
-    public TextMeshProUGUI healthText;
+    private TextMeshProUGUI healthText;
+
+    void Awake()
+    {
+        healthText = GetComponentInChildren<TextMeshProUGUI>();
+        Debug.Log("Found " + healthText.name);
+    }
 
     void Start()
     {
@@ -20,8 +26,8 @@ public class EnemyHealth : MonoBehaviour
         Debug.Log(health);
         health -= damage;
 
-        //if (healthText != null)
-        healthText.text = "HP: " + health;
+        if (healthText != null)
+            healthText.text = "HP: " + health;
 
         if (health <= 0)
         {
