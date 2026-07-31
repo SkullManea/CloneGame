@@ -13,6 +13,7 @@ public class EnemyMovement : MonoBehaviour
     public float chaseDistance;
     public float safeDistance;
     private bool isChasing;
+    public SpriteRenderer sprite;
 
 
     void Update()
@@ -42,12 +43,12 @@ public class EnemyMovement : MonoBehaviour
         {
             if (patrolDestination == 0)
             {
-                transform.localScale = new Vector3(-1, 1, 1);
+                sprite.flipX = true;
                 patrolDestination = 1;
             }
             else
             {
-                transform.localScale = new Vector3(1, 1, 1);
+                sprite.flipX = false;
                 patrolDestination = 0;
             }
         }
@@ -57,13 +58,13 @@ public class EnemyMovement : MonoBehaviour
     {
         if (transform.position.x > playerTransform.position.x)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            sprite.flipX = false;
             transform.position += Vector3.left * moveSpeed * Time.deltaTime;
         }
 
         if (transform.position.x < playerTransform.position.x)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            sprite.flipX = true;
             transform.position += Vector3.right * moveSpeed * Time.deltaTime;
         }
     }
