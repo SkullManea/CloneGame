@@ -153,8 +153,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -4.0000305, y: -0.5534992}
-  m_SizeDelta: {x: 16, y: -13.8905}
+  m_AnchoredPosition: {x: -6.1657, y: -0.5534992}
+  m_SizeDelta: {x: 3.006, y: -13.8905}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &12374541
 MonoBehaviour:
@@ -176,7 +176,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: b7fc35a2225ea0b4084595d8b0e0d487, type: 3}
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1042,6 +1042,7 @@ MonoBehaviour:
   playerTransform: {fileID: 994283773}
   chaseDistance: 2
   safeDistance: 7
+  sprite: {fileID: 786767860}
 --- !u!1 &786767856
 GameObject:
   m_ObjectHideFlags: 0
@@ -1364,6 +1365,7 @@ RectTransform:
   m_Children:
   - {fileID: 547829079}
   - {fileID: 593572616}
+  - {fileID: 1910234659}
   m_Father: {fileID: 232989207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -1750,7 +1752,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   moveSpeed: 7
-  jumpForce: 12
+  canMove: 1
+  jumpForce: 10
   groundCheck: {fileID: 1922670937}
   groundCheckRadius: 0.2
   groundLayer:
@@ -1759,18 +1762,24 @@ MonoBehaviour:
   fallMultiplier: 2
   currentStamina: 100
   maxStamina: 100
-  jumpCost: 20
+  jumpCost: 15
   chargeRate: 20
   staminaBar: {fileID: 12374541}
-  attackCost: 0
+  dashCost: 35
+  burnoutSpeed: 1
+  burnoutJump: 0.5
+  attackCost: 5
   attackOrigin: {fileID: 1574347757}
   attackRadius: 1
   enemyMask:
     serializedVersion: 2
     m_Bits: 0
-  attackDamage: 0
+  attackDamage: 10
   cooldownTime: 0.5
   cooldownTimer: 0
+  KBForce: 2
+  KnockFromRight: 0
+  dashPower: 10
 --- !u!114 &994283775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1847,22 +1856,6 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 641cd816-40e6-41b4-8c3d-04687c349290
     m_ActionName: 'Player/Sprint[/Keyboard/leftShift]'
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 53294427}
-        m_TargetAssemblyTypeName: GameManagerBehavior, Assembly-CSharp
-        m_MethodName: MainMenu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: 9c15ebd8-fc07-4083-a19c-9eee5e287ea7
-    m_ActionName: 'Player/Escape[/Keyboard/escape]'
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: c95b2375-e6d9-4b88-9c4c-c5e76515df4b
@@ -2653,6 +2646,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1910234658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1910234659}
+  - component: {fileID: 1910234661}
+  - component: {fileID: 1910234660}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1910234659
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910234658}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 885029100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -3.4087, y: -5.5392}
+  m_SizeDelta: {x: 556.2441, y: 100.8523}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1910234660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910234658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 93ff46175ede0274fa8b0b77676a80f5, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1910234661
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910234658}
+  m_CullTransparentMesh: 1
 --- !u!1 &1912008216
 GameObject:
   m_ObjectHideFlags: 0
@@ -3155,6 +3223,7 @@ MonoBehaviour:
   playerTransform: {fileID: 994283773}
   chaseDistance: 2
   loseDistance: 7
+  sprite: {fileID: 0}
 --- !u!50 &2147435042
 Rigidbody2D:
   serializedVersion: 5
