@@ -26,6 +26,10 @@ public class PlayerController : MonoBehaviour
     private Coroutine recharge;
     public UnityEngine.UI.Image staminaBar;
 
+    public float burnoutSpeed =1f;
+    public float burnoutJump = 0.5f;
+    //private bool inBurnout;
+
     [Header("Attacking")]
     public float attackCost;
     public Transform attackOrigin;
@@ -94,7 +98,6 @@ public class PlayerController : MonoBehaviour
 
         rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
 
-        //flip the character on the x-axis 1 to -1 when moving directions
         if (rigidBody.linearVelocityX < 0)
             transform.localScale = new Vector3(-1, 1, 1);
 
@@ -158,7 +161,7 @@ public class PlayerController : MonoBehaviour
         if (currentStamina < 0)
         {
             currentStamina = 0;
-            //insert burnout
+            Burnout();
         }
         staminaBar.fillAmount = currentStamina / maxStamina;
         if (recharge != null) StopCoroutine(recharge);
@@ -182,6 +185,26 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos() //for attacking
     {
         Gizmos.DrawWireSphere(attackOrigin.position, attackRadius);
+    }
+
+    private void Burnout()
+    {
+        moveSpeed = burnoutSpeed;
+        jumpForce = burnoutJump;
+        StopCoroutine(RechargeStamina());
+        StartCoroutine(BurnoutTimer());
+        //inBurnout = true;
+    }
+
+    private IEnumerator BurnoutTimer()
+    {
+        yield return new WaitForSeconds (3f);
+
+        StartCoroutine(RechargeStamina());
+        StopCoroutine(BurnoutTimer());
+        moveSpeed = 7f;
+        jumpForce = 5f;
+        //inBurnout = false;
     }
 
 
