@@ -12,7 +12,6 @@ public class EnemyHealth : MonoBehaviour
     void Awake()
     {
         healthText = GetComponentInChildren<TextMeshProUGUI>();
-        Debug.Log("Found " + healthText.name);
     }
 
     void Start()
@@ -23,7 +22,6 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        Debug.Log(health);
         health -= damage;
 
         if (healthText != null)

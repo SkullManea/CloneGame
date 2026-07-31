@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
     public UnityEngine.UI.Image staminaBar;
     public float dashCost;
 
-    public float burnoutSpeed =1f;
+    public float burnoutSpeed = 1f;
     public float burnoutJump = 0.5f;
     private bool inBurnout;
 
@@ -52,8 +52,9 @@ public class PlayerController : MonoBehaviour
     [Header("Dashing")]
     public float dashPower;
     private bool isDashing;
-    private float dashingTime = 1f;
-    
+    private bool canDash = true;
+    public float dashingTime = 1f;
+
 
     private void Awake()
     {
@@ -83,6 +84,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (isDashing)
+            return;
+
         Move();
     }
 
@@ -144,35 +148,35 @@ public class PlayerController : MonoBehaviour
     {
         if (!inBurnout)
         {
-          if (cooldownTimer <= 0)
-        {
+            if (cooldownTimer <= 0)
             {
-                Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
-                foreach (var enemy in enemiesInRange)
                 {
-                    enemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
-                    if (!isDashing)
+                    Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
+                    foreach (var enemy in enemiesInRange)
                     {
-                        currentStamina -= attackCost;
-                        Staminacharge();  
-                    }
-                    
-                }
+                        enemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
+                        if (!isDashing)
+                        {
+                            currentStamina -= attackCost;
+                            Staminacharge();
+                        }
 
-                cooldownTimer = cooldownTime; //resets timer
+                    }
+
+                    cooldownTimer = cooldownTime; //resets timer
+                }
             }
-        }
-        else
-        {
-            cooldownTimer -= Time.deltaTime;
-        }
+            else
+            {
+                cooldownTimer -= Time.deltaTime;
+            }
 
         }
         else
         {
             return;
         }
-        
+
     }
 
     void Staminacharge()
@@ -217,7 +221,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator BurnoutTimer()
     {
-        yield return new WaitForSeconds (7f);
+        yield return new WaitForSeconds(7f);
 
         StartCoroutine(RechargeStamina());
         StopCoroutine(BurnoutTimer());
@@ -228,30 +232,35 @@ public class PlayerController : MonoBehaviour
 
     private void OnDash(InputAction.CallbackContext contex)
     {
-        if (!inBurnout)
+        if (!inBurnout && canDash)
         {
-        StartCoroutine(Dash());
-        currentStamina -= dashCost;
-        Staminacharge();  
+            StartCoroutine(Dash());
+            currentStamina -= dashCost;
+            Staminacharge();
         }
         else
         {
             return;
         }
-        
+
     }
 
     private IEnumerator Dash()
     {
         isDashing = true;
+        canDash = false;
+
         float originalGravity = rigidBody.gravityScale;
         rigidBody.gravityScale = 0;
-        rigidBody.linearVelocity = new Vector2(transform. localScale.x * dashPower, 0f);
-        yield return new WaitForSeconds (dashingTime);
+
+        rigidBody.linearVelocity = new Vector2(transform.localScale.x * dashPower, 0f);
+
+        yield return new WaitForSeconds(dashingTime);
         rigidBody.gravityScale = originalGravity;
-        yield return new WaitForSeconds (2f);
+
         isDashing = false;
+
+        yield return new WaitForSeconds(1f);
+        canDash = true;
     }
-
-
 }
