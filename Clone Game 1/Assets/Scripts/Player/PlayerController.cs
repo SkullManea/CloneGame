@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public int comboDamage;
     public float cooldownTime = .5f;
     public float cooldownTimer = 0f;
-    private EnemyHealth enemyHealth;
+    
 
     [Header("KnockBack")]
     public float KBForce;
@@ -158,17 +158,16 @@ public class PlayerController : MonoBehaviour
                     foreach (var enemy in enemiesInRange)
                     {
                         EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
-                        if (!isDashing)
+                        if (canDash)
                         {
                             enemyHealth.TakeDamage(attackDamage);
-                            //enemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
                             currentStamina -= attackCost;
                             Staminacharge();
                         }
-                        else if (isDashing)
+                        else if (!canDash)
                         {
                             enemyHealth.TakeDamage(comboDamage);
-                            //enemy.GetComponent<EnemyHealth>().TakeDamage(comboDamage);
+                            Debug.Log("Combo");
                         }
 
                     }
