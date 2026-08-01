@@ -25,6 +25,12 @@ public class PlayerController : MonoBehaviour
     public float chargeRate;
     private Coroutine recharge;
     public UnityEngine.UI.Image staminaBar;
+    public float dashCost;
+
+    public float burnoutSpeed = 1f;
+    public float burnoutJump = 0.5f;
+    private bool inBurnout;
+    public ParticleSystem burnout;
 
     [Header("Attacking")]
     public float attackCost;
@@ -32,8 +38,10 @@ public class PlayerController : MonoBehaviour
     public float attackRadius = 1f;
     public LayerMask enemyMask;
     public int attackDamage;
+    public int comboDamage;
     public float cooldownTime = .5f;
     public float cooldownTimer = 0f;
+
 
     [Header("KnockBack")]
     public float KBForce;
@@ -44,6 +52,12 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rigidBody;
     private bool isGrounded;
 
+    [Header("Dashing")]
+    public float dashPower;
+    private bool isDashing;
+    private bool canDash = true;
+    public float dashingTime = 1f;
+
 
     private void Awake()
     {
@@ -51,6 +65,7 @@ public class PlayerController : MonoBehaviour
         rigidBody = GetComponent<Rigidbody2D>();
         playerControls.Movement.Jump.performed += OnJump;
         playerControls.Movement.Attack.performed += OnAttack;
+        playerControls.Movement.Dash.performed += OnDash;
     }
 
     private void OnEnable()
@@ -68,10 +83,16 @@ public class PlayerController : MonoBehaviour
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
         HandleBetterFall();
+
+        if (cooldownTimer > 0)
+            cooldownTimer -= Time.deltaTime;
     }
 
     private void FixedUpdate()
     {
+        if (isDashing)
+            return;
+
         Move();
     }
 
@@ -94,7 +115,6 @@ public class PlayerController : MonoBehaviour
 
         rigidBody.linearVelocity = new Vector2(movement.x * moveSpeed, rigidBody.linearVelocity.y);
 
-        //flip the character on the x-axis 1 to -1 when moving directions
         if (rigidBody.linearVelocityX < 0)
             transform.localScale = new Vector3(-1, 1, 1);
 
@@ -132,23 +152,39 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttack(InputAction.CallbackContext contex)
     {
-        if (cooldownTimer <= 0)
+        if (!inBurnout)
         {
-            {
-                Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
-                foreach (var enemy in enemiesInRange)
-                {
-                    //enemy.GetComponent<HealthManager>().TakeDamage(attackDamage);
-                    currentStamina -= attackCost;
-                    Staminacharge();
-                }
 
-                cooldownTimer = cooldownTime; //resets timer
+            if (cooldownTimer <= 0)
+            {
+                {
+                    Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
+                    foreach (var enemy in enemiesInRange)
+                    {
+                        EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
+                        if (canDash)
+                        {
+                            enemyHealth.TakeDamage(attackDamage);
+                            currentStamina -= attackCost;
+                            Staminacharge();
+                        }
+                        else if (!canDash)
+                        {
+                            enemyHealth.TakeDamage(comboDamage);
+                            Debug.Log("Combo");
+                        }
+
+                    }
+
+                    cooldownTimer = cooldownTime; //resets timer
+
+                }
             }
         }
+
         else
         {
-            cooldownTimer -= Time.deltaTime;
+            return;
         }
 
     }
@@ -158,7 +194,7 @@ public class PlayerController : MonoBehaviour
         if (currentStamina < 0)
         {
             currentStamina = 0;
-            //insert burnout
+            Burnout();
         }
         staminaBar.fillAmount = currentStamina / maxStamina;
         if (recharge != null) StopCoroutine(recharge);
@@ -168,7 +204,7 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RechargeStamina()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(3f);
 
         while (currentStamina < maxStamina)
         {
@@ -184,5 +220,59 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawWireSphere(attackOrigin.position, attackRadius);
     }
 
+    private void Burnout()
+    {
+        moveSpeed = burnoutSpeed;
+        jumpForce = burnoutJump;
+        StopCoroutine(RechargeStamina());
+        StartCoroutine(BurnoutTimer());
+        inBurnout = true;
+        burnout.Play();
+    }
 
+    private IEnumerator BurnoutTimer()
+    {
+        yield return new WaitForSeconds(7f);
+
+        StartCoroutine(RechargeStamina());
+        StopCoroutine(BurnoutTimer());
+        moveSpeed = 7f;
+        jumpForce = 5f;
+        inBurnout = false;
+        burnout.Stop();
+    }
+
+    private void OnDash(InputAction.CallbackContext contex)
+    {
+        if (!inBurnout && canDash)
+        {
+            StartCoroutine(Dash());
+            currentStamina -= dashCost;
+            Staminacharge();
+        }
+        else
+        {
+            return;
+        }
+
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        canDash = false;
+
+        float originalGravity = rigidBody.gravityScale;
+        rigidBody.gravityScale = 0;
+
+        rigidBody.linearVelocity = new Vector2(transform.localScale.x * dashPower, 0f);
+
+        yield return new WaitForSeconds(dashingTime);
+        rigidBody.gravityScale = originalGravity;
+
+        isDashing = false;
+
+        yield return new WaitForSeconds(1f);
+        canDash = true;
+    }
 }
