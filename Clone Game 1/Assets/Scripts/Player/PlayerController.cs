@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public int comboDamage;
     public float cooldownTime = .5f;
     public float cooldownTimer = 0f;
-    
+
 
     [Header("KnockBack")]
     public float KBForce;
@@ -83,6 +83,9 @@ public class PlayerController : MonoBehaviour
         movement = playerControls.Movement.Move.ReadValue<Vector2>();
         CheckIsGrounded();
         HandleBetterFall();
+
+        if (cooldownTimer > 0)
+            cooldownTimer -= Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -151,6 +154,7 @@ public class PlayerController : MonoBehaviour
     {
         if (!inBurnout)
         {
+
             if (cooldownTimer <= 0)
             {
                 {
@@ -173,14 +177,11 @@ public class PlayerController : MonoBehaviour
                     }
 
                     cooldownTimer = cooldownTime; //resets timer
+
                 }
             }
-            else
-            {
-                cooldownTimer -= Time.deltaTime;
-            }
-
         }
+
         else
         {
             return;

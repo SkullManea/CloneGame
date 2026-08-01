@@ -1895,7 +1895,7 @@ MonoBehaviour:
   fallMultiplier: 2
   currentStamina: 100
   maxStamina: 100
-  jumpCost: 110
+  jumpCost: 15
   chargeRate: 20
   staminaBar: {fileID: 12374541}
   dashCost: 35
