@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public float burnoutSpeed = 1f;
     public float burnoutJump = 0.5f;
     private bool inBurnout;
+    public ParticleSystem burnout;
 
     [Header("Attacking")]
     public float attackCost;
@@ -37,8 +38,10 @@ public class PlayerController : MonoBehaviour
     public float attackRadius = 1f;
     public LayerMask enemyMask;
     public int attackDamage;
+    public int comboDamage;
     public float cooldownTime = .5f;
     public float cooldownTimer = 0f;
+    private EnemyHealth enemyHealth;
 
     [Header("KnockBack")]
     public float KBForce;
@@ -154,11 +157,18 @@ public class PlayerController : MonoBehaviour
                     Collider2D[] enemiesInRange = Physics2D.OverlapCircleAll(attackOrigin.position, attackRadius, enemyMask);
                     foreach (var enemy in enemiesInRange)
                     {
-                        enemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
+                        EnemyHealth enemyHealth = enemy.GetComponent<EnemyHealth>();
                         if (!isDashing)
                         {
+                            enemyHealth.TakeDamage(attackDamage);
+                            //enemy.GetComponent<EnemyHealth>().TakeDamage(attackDamage);
                             currentStamina -= attackCost;
                             Staminacharge();
+                        }
+                        else if (isDashing)
+                        {
+                            enemyHealth.TakeDamage(comboDamage);
+                            //enemy.GetComponent<EnemyHealth>().TakeDamage(comboDamage);
                         }
 
                     }
@@ -217,6 +227,7 @@ public class PlayerController : MonoBehaviour
         StopCoroutine(RechargeStamina());
         StartCoroutine(BurnoutTimer());
         inBurnout = true;
+        burnout.Play();
     }
 
     private IEnumerator BurnoutTimer()
@@ -228,6 +239,7 @@ public class PlayerController : MonoBehaviour
         moveSpeed = 7f;
         jumpForce = 5f;
         inBurnout = false;
+        burnout.Stop();
     }
 
     private void OnDash(InputAction.CallbackContext contex)
