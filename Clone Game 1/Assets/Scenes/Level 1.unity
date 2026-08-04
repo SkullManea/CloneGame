@@ -611,7 +611,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f750483dec96c1445824b9e644beabd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  damage: 2
+  damage: 5
   playerHealth: {fileID: 994283775}
   playerController: {fileID: 994283774}
 --- !u!61 &213049597
@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f750483dec96c1445824b9e644beabd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  damage: 2
+  damage: 5
   playerHealth: {fileID: 994283775}
   playerController: {fileID: 994283774}
 --- !u!61 &259375276
@@ -5239,7 +5239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f750483dec96c1445824b9e644beabd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  damage: 2
+  damage: 5
   playerHealth: {fileID: 994283775}
   playerController: {fileID: 994283774}
 --- !u!61 &955031960
@@ -5580,7 +5580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdd09790f2bce6049aa1c9047afb7647, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 1000
+  maxHealth: 25
   health: 12
   healthText: {fileID: 800372071}
 --- !u!114 &994283776
@@ -6362,7 +6362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f750483dec96c1445824b9e644beabd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  damage: 2
+  damage: 5
   playerHealth: {fileID: 994283775}
   playerController: {fileID: 994283774}
 --- !u!61 &1142580759
@@ -7560,7 +7560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d427dcf693f007d4e8b96e53d7b10407, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyHealth
-  maxHealth: 20
+  maxHealth: 15
   health: 0
   byeText: {fileID: 1460962205}
   sprite: {fileID: 2077799892}
@@ -16025,7 +16025,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f750483dec96c1445824b9e644beabd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDamage
-  damage: 0
+  damage: 5
   playerHealth: {fileID: 994283775}
   playerController: {fileID: 994283774}
 --- !u!58 &2077799895
