@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = .2f;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private LayerMask wallLayer;
+
 
     [SerializeField] private float fallMultiplier = 2f;
 
@@ -100,7 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         bool notGrounded = isGrounded;
 
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer | wallLayer);
 
         if (!notGrounded && isGrounded)
         {
@@ -203,12 +205,13 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator RechargeStamina()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
 
         while (currentStamina < maxStamina)
         {
             currentStamina += chargeRate / 10f;
-            if (currentStamina > maxStamina) currentStamina = maxStamina;
+            if (currentStamina > maxStamina)
+                currentStamina = maxStamina;
             staminaBar.fillAmount = currentStamina / maxStamina;
             yield return new WaitForSeconds(.1f);
         }

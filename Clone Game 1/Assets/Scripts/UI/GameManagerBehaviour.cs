@@ -6,6 +6,8 @@ public class GameManagerBehavior : MonoBehaviour
     [SerializeField]
     GameObject pauseMenu;
 
+    public GameObject levelCollider;
+
     public static bool isPaused;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -55,5 +57,13 @@ public class GameManagerBehavior : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            SceneManager.LoadScene(1);
+        }
     }
 }

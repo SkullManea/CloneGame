@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -14,6 +15,9 @@ public class EnemyMovement : MonoBehaviour
     public float safeDistance;
     private bool isChasing;
     public SpriteRenderer sprite;
+
+    public Collider2D enemyCollider;
+    public LayerMask wallLayer;
 
 
     void Update()
@@ -30,7 +34,6 @@ public class EnemyMovement : MonoBehaviour
             ChasePlayer();
         else
             Patrol();
-
     }
 
     private void Patrol()
@@ -59,13 +62,27 @@ public class EnemyMovement : MonoBehaviour
         if (transform.position.x > playerTransform.position.x)
         {
             sprite.flipX = false;
-            transform.position += Vector3.left * moveSpeed * Time.deltaTime;
+
+            Vector2 rayStart = new Vector2(enemyCollider.bounds.min.x, enemyCollider.bounds.center.y + 0.3f);
+
+            Debug.DrawRay(rayStart, Vector2.left * 0.1f, Color.red);
+            RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.left, 0.1f, wallLayer);
+
+            if (hit.collider == null)
+                transform.position += Vector3.left * moveSpeed * Time.deltaTime;
         }
 
         if (transform.position.x < playerTransform.position.x)
         {
             sprite.flipX = true;
-            transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+
+            Vector2 rayStart = new Vector2(enemyCollider.bounds.max.x, enemyCollider.bounds.center.y + 0.3f);
+
+            Debug.DrawRay(rayStart, Vector2.right * 0.1f, Color.red);
+            RaycastHit2D hit = Physics2D.Raycast(rayStart, Vector2.right, 0.1f, wallLayer);
+
+            if (hit.collider == null)
+                transform.position += Vector3.right * moveSpeed * Time.deltaTime;
         }
     }
 }
