@@ -177,7 +177,6 @@ public class PlayerController : MonoBehaviour
                     }
 
                     cooldownTimer = cooldownTime; //resets timer
-
                 }
             }
         }
@@ -237,7 +236,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(RechargeStamina());
         StopCoroutine(BurnoutTimer());
         moveSpeed = 7f;
-        jumpForce = 5f;
+        jumpForce = 10f;
         inBurnout = false;
         burnout.Stop();
     }
