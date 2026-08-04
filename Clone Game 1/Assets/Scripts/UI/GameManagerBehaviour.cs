@@ -58,12 +58,4 @@ public class GameManagerBehavior : MonoBehaviour
     {
         Application.Quit();
     }
-
-    public void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            SceneManager.LoadScene(1);
-        }
-    }
 }

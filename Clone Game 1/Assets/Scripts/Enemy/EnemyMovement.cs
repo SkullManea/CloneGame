@@ -59,6 +59,15 @@ public class EnemyMovement : MonoBehaviour
 
     private void ChasePlayer()
     {
+        float leftLimit = Mathf.Min(patrolPoints[0].position.x, patrolPoints[1].position.x);
+        float rightLimit = Mathf.Max(patrolPoints[0].position.x, patrolPoints[1].position.x);
+
+        if (transform.position.x <= leftLimit || transform.position.x >= rightLimit)
+        {
+            isChasing = false;
+            return;
+        }
+
         if (transform.position.x > playerTransform.position.x)
         {
             sprite.flipX = false;

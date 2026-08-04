@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
@@ -48,6 +47,7 @@ public class PlayerController : MonoBehaviour
     [Header("KnockBack")]
     public float KBForce;
     public bool KnockFromRight;
+    private bool canBeHit = true;
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -126,10 +126,25 @@ public class PlayerController : MonoBehaviour
 
     public void KnockBack(bool fromRight)
     {
+        if (!canBeHit)
+            return;
+
+        StartCoroutine(HitRoutine(fromRight));
+    }
+
+    private IEnumerator HitRoutine(bool fromRight)
+    {
+        canBeHit = false;
         canMove = false;
 
-        float direction = fromRight ? -1 : 1f;
+        float direction = fromRight ? -1 : 1;
         rigidBody.linearVelocity = new Vector2(direction * KBForce, KBForce);
+
+        yield return new WaitForSeconds(0.2f);
+        canMove = true;
+
+        yield return new WaitForSeconds(0.8f);
+        canBeHit = true;
     }
 
     private void OnJump(InputAction.CallbackContext contex)
