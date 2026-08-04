@@ -1,7 +1,7 @@
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
@@ -237,7 +237,7 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(RechargeStamina());
         StopCoroutine(BurnoutTimer());
         moveSpeed = 7f;
-        jumpForce = 5f;
+        jumpForce = 10f;
         inBurnout = false;
         burnout.Stop();
     }
